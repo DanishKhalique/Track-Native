@@ -1,37 +1,24 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Text, Input } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import Spacer from '../components/Spacer';
+import { NavigationEvents } from 'react-navigation';
+import AuthForm from '../components/AuthForm';
+import Navlink from '../components/Navlink';
 import { Context as AuthContext } from '../context/AuthContext';
 
 const SignupScreen = ({ navigation }) => {
-	const [ email, setEmail ] = useState('');
-	const [ password, setPassword ] = useState('');
-	const { state, signup } = useContext(AuthContext);
+	const { state, signup, clearErrorMessage, tryLocalSignin } = useContext(AuthContext);
 	//console.log(state);
+
 	return (
 		<View style={styles.container}>
-			<Spacer />
-			<Text h3>Sign Up for Tracker</Text>
-			<Spacer />
-			<Input label="Email" value={email} onChangeText={setEmail} autoCapitalize="none" autoCorrect={false} />
-			<Spacer />
-			<Input
-				label="Password"
-				value={password}
-				onChangeText={setPassword}
-				autoCapitalize="none"
-				autoCorrect={false}
-				secureTextEntry
+			<NavigationEvents onWillFocus={clearErrorMessage} />
+			<AuthForm
+				headerText="Sign Up for  Tracker"
+				errorMessage={state.errorMessage}
+				submitButtonText="Sign Up"
+				onSubmit={signup}
 			/>
-			{state.errorMessage ? <Text style={styles.errorMessage}>{state.errorMessage}</Text> : null}
-			<Spacer />
-			<Button title="Sign Up" onPress={() => signup({ email, password })} />
-			<Spacer />
-			<TouchableOpacity onPress={() => navigation.navigate("Signin")}>
-			<Text style={styles.link}>Already have an account ? Sign in instead</Text>
-			</TouchableOpacity>
+			<Navlink routeName="Signin" text="Already have an account? Sign In instead" />
 		</View>
 	);
 };
@@ -51,16 +38,5 @@ const styles = StyleSheet.create({
 		borderColor: 'red',
 		borderWidth: 10,
 		marginBottom: 100
-	},
-	errorMessage: {
-		fontSize: 20,
-		fontWeight: 'bold',
-		color: 'red',
-		marginTop: 10,
-	
-	},
-	link: {
-		color: 'blue',
-		fontSize: 17
 	}
 });
