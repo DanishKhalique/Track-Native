@@ -67,7 +67,7 @@ const signout = (dispatch) => async () => {
 	navigate('loginFlow');
 };
 
-export const { Provider, Context } = createDataContext(
+export const { Context, Provider } = createDataContext(
 	authReducer,
 	{ signup, signin, signout, clearErrorMessage, tryLocalSignin },
 	{ token: null, errorMessage: '' }

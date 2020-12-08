@@ -1,48 +1,33 @@
-import '../_markLocation';
-import React, { useEffect, useState } from 'react';
+//import '../_markLocation'
+import React, { useCallback, useContext } from 'react';
 import { StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-navigation';
+import { SafeAreaView, withNavigationFocus } from 'react-navigation';
 import { Text } from 'react-native-elements';
-import { requestPermissionsAsync, watchPositionAsync, Accuracy } from 'expo-location';
-import Map from '../components/TrackMap/Map';
+import Map from '../components/Map';
+import { Context as LocationContext } from '../context/LocationContext';
+import useLocation from '../hooks/useLocation';
+import TrackForm from '../components/TrackForm';
 
-const TrackCreateScreen = () => {
-	const [ err, setErr ] = useState(null);
-
-	const startWatching = async () => {
-		try {
-			const { granted } = await requestPermissionsAsync();
-			await watchPositionAsync(
-				{
-					accuracy: Accuracy.BestForNavigation,
-					timeInterval: 1000,
-					distanceInterval: 10
-				},
-				(location) => {
-					console.log(location);
-				}
-			);
-			if (!granted) {
-				throw new Error('Location permission not granted');
-			}
-		} catch (e) {
-			setErr(e);
-		}
-	};
-
-	useEffect(() => {
-		startWatching();
-	}, []);
+const TrackCreateScreen = ({ isFocused }) => {
+	const { state: { recording }, addLocation } = useContext(LocationContext);
+	const callback = useCallback(
+		(location) => {
+			addLocation(location, recording);
+		},
+		[ recording ]
+	);
+	const [ err ] = useLocation(isFocused || recording, callback); //custom hook // true start tracking
 
 	return (
 		<SafeAreaView forceInset={{ top: 'always' }}>
 			<Text h2>Create a Track</Text>
 			<Map />
 			{err ? <Text>Please enable location services</Text> : null}
+			<TrackForm />
 		</SafeAreaView>
 	);
 };
 
-export default TrackCreateScreen;
+export default withNavigationFocus(TrackCreateScreen);
 
 const styles = StyleSheet.create({});
