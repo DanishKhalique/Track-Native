@@ -5,10 +5,10 @@ import { navigate } from '../navigationRef';
 
 export default () => {
 	const { createTrack } = useContext(TrackContext);
-	const { state: { location, name }, reset } = useContext(LocationContext);
+	const { state: { locations, name }, reset } = useContext(LocationContext);
 
 	const saveTrack = async () => {
-		await createTrack(name, location);
+		await createTrack(name, locations);
 		reset();
 		navigate('TrackList');
 	};

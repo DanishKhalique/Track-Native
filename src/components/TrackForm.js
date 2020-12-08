@@ -5,7 +5,7 @@ import Spacer from './Spacer';
 import useSaveTrack from '../hooks/useSaveTrack'
 
 const TrackForm = () => {
-	const { state: { name, recording, location }, startRecording, stopRecording, changeName } = useContext(
+	const { state: { name, recording, locations }, startRecording, stopRecording, changeName } = useContext(
 		LocationContext
 	);
 
@@ -23,9 +23,8 @@ const TrackForm = () => {
 				<Button onPress={startRecording} title="Start Recording" />
 			)}
 			<Spacer />
-			{!recording && location.length ? <Button title="Save Recording" onPress={saveTrack} /> : null}
+			{!recording && locations.length ? <Button title="Save Recording" onPress={saveTrack} /> : null}
 
-			<Spacer />
 		</React.Fragment>
 	);
 };

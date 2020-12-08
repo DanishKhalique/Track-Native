@@ -10,7 +10,6 @@ const TrackListScreen = ({ navigation }) => {
 	return (
 		<React.Fragment>
 			<NavigationEvents onWillFocus={fetchTracks} />
-			<Text style={{ fontSize: 48, alignSelf: 'center' }}>TrackList</Text>
 			<FlatList
 				data={state}
 				keyExtractor={(item) => item._id}
@@ -24,7 +23,12 @@ const TrackListScreen = ({ navigation }) => {
 			/>
 		</React.Fragment>
 	);
+
 };
+
+TrackListScreen.navigationOptions = () => {
+	title: 'Tracks'
+}
 
 export default TrackListScreen;
 
